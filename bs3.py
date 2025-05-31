@@ -1,4 +1,3 @@
-
 # Starticulation with Country-Specific Norms
 # Updated to include a country dropdown and dialect-aware articulation expectations
 
@@ -29,6 +28,7 @@ def get_mastery_ages(country):
         base['θ'] = 96
         base['ð'] = 96
 
+    # Add clusters (defaults for all countries)
     cluster_age = 60
     for cluster in [
         'bl', 'fl', 'pl', 'br', 'fr', 'pr', 'kw', 'tw',
@@ -39,6 +39,7 @@ def get_mastery_ages(country):
         base[cluster] = cluster_age
     return base
 
+# --- Target Positions ---
 def get_target_positions():
     tp = {
         'tʃ': ['initial', 'medial', 'final'], 'dʒ': ['initial', 'medial', 'final'],
@@ -55,6 +56,7 @@ def get_target_positions():
         tp[cl] = ['initial']
     return tp
 
+# --- Phonological Processes ---
 phonological_processes = {
     'backing': 'atypical', 'interdental lisp': 'atypical',
     'fronting': 36, 'gliding': 60, 'stopping': 48, 'vowelisation': 48,
@@ -66,6 +68,7 @@ phonological_processes = {
     'weak syllable deletion': 48, 'epenthesis': 60
 }
 
+# --- UI Setup ---
 st.set_page_config(page_title="Starticulation", layout="wide")
 st.title("Starticulation Articulation Assessment")
 
@@ -73,6 +76,7 @@ country = st.selectbox("Select Country for Norms", ["Australia", "United Kingdom
 mastery_ages = get_mastery_ages(country)
 target_positions = get_target_positions()
 
+# Fill in remaining target positions
 for s in mastery_ages:
     if s not in target_positions:
         target_positions[s] = ['initial', 'medial', 'final']
@@ -145,8 +149,12 @@ if child_name and age_months:
         ]
         st.markdown("<ul>" + ''.join(f"<li>{g}</li>" for g in goal_list) + "</ul>", unsafe_allow_html=True)
         st.download_button(
-            "Download SMART Goals (TXT)",
-            "
+    "Download SMART Goals (TXT)",
+    "
 ".join(goal_list),
-            file_name=f"{child_name}_goals.txt"
-        )
+    file_name=f"{child_name}_goals.txt"
+)",
+    "
+".join(goal_list),
+    file_name=f"{child_name}_goals.txt"
+)
